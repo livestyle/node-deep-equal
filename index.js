@@ -27,6 +27,14 @@ var deepEqual = module.exports = function (actual, expected, opts) {
   }
 }
 
+var setToArray = Array.from || function(obj) {
+  var arr = [];
+  for (var value of obj) {
+    arr.push(value);
+  }
+  return arr;
+}
+
 function isUndefinedOrNull(value) {
   return value === null || value === undefined;
 }
@@ -38,6 +46,14 @@ function isBuffer (x) {
   }
   if (x.length > 0 && typeof x[0] !== 'number') return false;
   return true;
+}
+
+function isMap(x) {
+  return typeof Map !== 'undefined' && x instanceof Map;
+}
+
+function isSet(x) {
+  return typeof Set !== 'undefined' && x instanceof Set;
 }
 
 function objEquiv(a, b, opts) {
@@ -65,6 +81,25 @@ function objEquiv(a, b, opts) {
       if (a[i] !== b[i]) return false;
     }
     return true;
+  }
+  if (isMap(a)) {
+    if (!isMap(b)) {
+      return false;
+    }
+    if (a.size !== b.size) return false;
+    for (key of a.keys()) {
+      if (!b.has(key) || !deepEqual(a.get(key), b.get(key))) {
+        return false;
+      }
+    }
+    return true;
+  }
+  if (isSet(a)) {
+    if (!isSet(b)) {
+      return false;
+    }
+    if (a.size !== b.size) return false;
+    return deepEqual(setToArray(a), setToArray(b));
   }
   try {
     var ka = objectKeys(a),

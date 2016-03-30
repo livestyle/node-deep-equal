@@ -93,3 +93,26 @@ test('null == undefined', function (t) {
     t.notOk(equal(null, undefined, { strict: true }))
     t.end()
 })
+
+test('maps', function (t) {
+    var map = function(obj) {
+        return objectKeys(obj).reduce(function(m, key) {
+            return m.set(key, obj[key]);
+        }, new Map());
+    };
+    t.ok(equal(map({a: 1, b: 2}), map({a: 1, b: 2})));
+    t.ok(equal(map({a: 1, b: [2]}), map({a: 1, b: [2]})));
+    t.notOk(equal(map({a: 1, b: 2}), map({a: 1, b: 2, c: 3})));
+    t.notOk(equal(map({a: 1, b: 3}), map({a: 1, b: 2})));
+    t.notOk(equal(map({a: 1, b: 2}), map({a: 1, b: [2]})));
+    t.end();
+})
+
+test('sets', function (t) {
+    t.ok(equal(new Set([1, 2]), new Set([1, 2])));
+    t.ok(equal(new Set([1, [2]]), new Set([1, [2]])));
+    t.notOk(equal(new Set([1, 2]), new Set([1, 2, 3])));
+    t.notOk(equal(new Set([1, 3]), new Set([1, 2])));
+    t.notOk(equal(new Set([1, [2]]), new Set([1, 2])));
+    t.end();
+})
