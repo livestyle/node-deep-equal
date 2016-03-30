@@ -99,7 +99,7 @@ function objEquiv(a, b, opts) {
       return false;
     }
     if (a.size !== b.size) return false;
-    return deepEqual(setToArray(a), setToArray(b));
+    return deepEqual(setToArray(a).sort(), setToArray(b).sort());
   }
   try {
     var ka = objectKeys(a),

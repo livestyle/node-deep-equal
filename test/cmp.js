@@ -111,6 +111,7 @@ test('maps', function (t) {
 test('sets', function (t) {
     t.ok(equal(new Set([1, 2]), new Set([1, 2])));
     t.ok(equal(new Set([1, [2]]), new Set([1, [2]])));
+    t.ok(equal(new Set([2, 1]), new Set([1, 2])));
     t.notOk(equal(new Set([1, 2]), new Set([1, 2, 3])));
     t.notOk(equal(new Set([1, 3]), new Set([1, 2])));
     t.notOk(equal(new Set([1, [2]]), new Set([1, 2])));
